@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03080d">
+  <title>VorteX AI — Sign in</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/votex-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v() }}">
+  <link rel="stylesheet" href="/static/css/hud.css?v={{ asset_v() }}">
+  <script>document.documentElement.classList.add("hud-ready");</script>
+</head>
+<body class="auth-body">
+<div class="aurora"></div>
+<div class="grid-lines"></div>
+<div class="hud-overlay" aria-hidden="true">
+  <span class="hud-corner hud-corner-tl"></span>
+  <span class="hud-corner hud-corner-tr"></span>
+  <span class="hud-corner hud-corner-bl"></span>
+  <span class="hud-corner hud-corner-br"></span>
+  <span class="hud-side hud-side-left">VX-OS <b>04</b> // AUTH</span>
+  <span class="hud-side hud-side-right">NEURAL CORE // SECURE</span>
+</div>
+<div class="hud-telemetry" aria-hidden="true">
+  <span class="hud-tel-label"><i></i> ARC REACTOR</span>
+  <span class="hud-tel-clock" data-hud-clock>--:--:--</span>
+  <span class="hud-tel-page" data-hud-page>VX-OS // ONLINE</span>
+</div>
+
+<div class="auth-shell">
+  <section class="auth-hero">
+    <div class="brand">
+      <img class="brand-logo" src="/static/img/votex-logo.svg" alt="VorteX AI">
+      <div>
+        <span class="brand-name">VorteX <em>AI</em></span>
+        <span class="brand-sub">AI workspace</span>
+      </div>
+    </div>
+
+    <div>
+      <h1>Your ideas, <span>engineered</span> at the speed of thought.</h1>
+      <p>One workspace for conversations, code and live previews — with model effort control and a Think mode when the answer has to be right.</p>
+
+      <ul class="feature-list">
+        <li><span class="dot-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Split-screen Code mode with live preview</li>
+        <li><span class="dot-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Effort control and Think mode on every message</li>
+        <li><span class="dot-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Any model — admins plug in their own API keys</li>
+        <li><span class="dot-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Simple plans paid through PayPal</li>
+      </ul>
+    </div>
+
+    <p class="muted" style="font-size:11.5px">© 2026 VorteX AI</p>
+  </section>
+
+  <section class="auth-panel">
+    <div class="auth-card">
+      <h2 id="authTitle">Welcome back</h2>
+      <p id="authSub">Sign in to continue to your workspace.</p>
+
+      <div class="auth-tabs">
+        <button type="button" data-tab="login" class="active">Sign in</button>
+        <button type="button" data-tab="register">Create account</button>
+      </div>
+
+      <div class="form-error hidden" id="authError" role="alert" aria-live="polite"></div>
+
+      <form id="authForm" novalidate>
+        <div class="field hidden" id="nameField">
+          <label class="label" for="name">Name</label>
+          <input class="input" id="name" name="name" type="text" placeholder="Your name" autocomplete="name" maxlength="60">
+        </div>
+        <div class="field">
+          <label class="label" for="email">Email</label>
+          <input class="input" id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+        </div>
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <div class="pw-wrap">
+            <input class="input" id="password" name="password" type="password" placeholder="At least 10 characters" autocomplete="current-password" required aria-describedby="pwMeterText">
+            <button class="pw-toggle" id="pwToggle" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+          </div>
+          <div class="pw-meter hidden" id="pwMeter" data-score="0">
+            <span></span><span></span><span></span><span></span>
+            <small id="pwMeterText">Use 10+ characters with a letter and a number.</small>
+          </div>
+          <small class="field-hint hidden" id="capsHint">Caps Lock is on.</small>
+        </div>
+        <div class="field hidden" id="confirmField">
+          <label class="label" for="confirmPassword">Confirm password</label>
+          <input class="input" id="confirmPassword" name="confirmPassword" type="password" placeholder="Repeat your password" autocomplete="new-password" aria-describedby="confirmError">
+          <small class="field-error hidden" id="confirmError">Passwords do not match.</small>
+        </div>
+        <button class="btn btn-primary auth-submit" id="authSubmit" type="submit">Sign in</button>
+      </form>
+
+      <p class="auth-hint">Accounts live on this PC. Ask an admin if you need access.</p>
+      <p class="auth-hint"><a href="/pricing">View plans and pricing →</a></p>
+    </div>
+  </section>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script>
+  window.VORTEX_AUTH = {{ {"next": request.query_params.get("next", "/")}|tojson }};
+</script>
+<script src="/static/js/hud.js?v={{ asset_v() }}"></script>
+<script src="/static/js/auth.js?v={{ asset_v() }}"></script>
+</body>
+</html>

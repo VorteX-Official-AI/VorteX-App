@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03080d">
+  <title>VorteX AI — Workspace</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/votex-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v() }}">
+  <link rel="stylesheet" href="/static/css/hud.css?v={{ asset_v() }}">
+  <script>document.documentElement.classList.add("hud-ready");</script>
+</head>
+<body class="workspace-body">
+<div class="aurora"></div>
+<div class="hud-overlay" aria-hidden="true">
+  <span class="hud-corner hud-corner-tl"></span>
+  <span class="hud-corner hud-corner-tr"></span>
+  <span class="hud-corner hud-corner-bl"></span>
+  <span class="hud-corner hud-corner-br"></span>
+  <span class="hud-side hud-side-left">VX-OS <b>04</b> // WORKSPACE</span>
+  <span class="hud-side hud-side-right">NEURAL CORE // ACTIVE</span>
+</div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img class="brand-logo" src="/static/img/votex-logo.svg" alt="VorteX AI">
+      <div class="brand-text">
+        <span class="brand-name">VorteX <em>AI</em></span>
+        <span class="brand-sub">AI workspace</span>
+      </div>
+      <button class="icon-btn side-collapse" id="sideCollapseBtn" type="button" title="Collapse sidebar" aria-label="Collapse sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16M15 9l-3 3 3 3"/></svg>
+      </button>
+    </div>
+
+    <div class="side-section">
+      <div class="side-label">Mode</div>
+      <div class="mode-switch" id="modeSwitch">
+        <button type="button" data-mode="chat" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.6 9.6 0 0 1-2.9-.4L3 21l1.5-5.4A8.3 8.3 0 0 1 3 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+          Chat
+        </button>
+        <button type="button" data-mode="code">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>
+          Code
+        </button>
+      </div>
+    </div>
+
+    <div class="side-actions">
+      <button class="side-action" id="sideNewChat" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        <span>New chat</span>
+      </button>
+      <button class="side-action" id="sideNewProject" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4l2 2.4h9A1.5 1.5 0 0 1 21 10v8.5A1.5 1.5 0 0 1 19.5 20h-15A1.5 1.5 0 0 1 3 18.5Z"/><path d="M12 11v5M9.5 13.5h5"/></svg>
+        <span>New project</span>
+      </button>
+    </div>
+
+    <div class="side-section grow">
+      <div class="side-label-row">
+        <div class="side-label" id="historyLabel">History</div>
+        <span class="side-count" id="historyCount">0</span>
+      </div>
+      <div class="side-search">
+        <svg class="ss-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
+        <input id="sideSearch" type="search" placeholder="Search chats and projects" autocomplete="off" spellcheck="false" aria-label="Search chats and projects">
+        <button class="ss-clear hidden" id="sideSearchClear" type="button" title="Clear search" aria-label="Clear search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="history" id="historyList"></div>
+    </div>
+
+    <div class="usage-card">
+      <div class="usage-top">
+        <span class="pill" id="planBadge">FREE</span>
+        <span class="usage-pct" id="usagePct">0% used</span>
+      </div>
+      <div class="usage-bar"><i id="usageFill"></i></div>
+      <div class="usage-meta">
+        <span id="tokenLabel">0 tokens</span>
+        <span id="creditLabel">0 credits</span>
+      </div>
+      <a class="usage-link" href="/pricing">Upgrade plan →</a>
+    </div>
+
+    <div class="side-footer">
+      <div class="avatar" id="userAvatar">V</div>
+      <div class="user-meta">
+        <span id="userName">{{ user.name }}</span>
+        <span id="userEmail">{{ user.email }}</span>
+      </div>
+      {% if user.role == 'admin' %}
+      <a class="icon-btn" href="/admin" title="Admin dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3Z"/><path d="M9.5 12.5 11 14l3.5-3.5"/></svg>
+      </a>
+      {% endif %}
+      <button class="icon-btn" id="logoutBtn" title="Sign out" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="chat-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.6 9.6 0 0 1-2.9-.4L3 21l1.5-5.4A8.3 8.3 0 0 1 3 11.5 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>
+        <span id="chatTitle">New chat</span>
+      </div>
+
+      <div class="top-right">
+        <span class="hud-top-status" aria-hidden="true"><i></i>ARC <b data-hud-clock>--:--:--</b></span>
+        <span class="top-note" id="modeNote">Chat mode</span>
+        <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Open settings" aria-haspopup="dialog" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+        </button>
+        <button class="icon-btn" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+      <section class="chat-pane">
+        <div class="todo-card hidden" id="todoCard" aria-live="polite">
+          <div class="todo-head">
+            <span>Working through it</span>
+            <span id="todoProgress">0/0</span>
+          </div>
+          <div class="todo-items" id="todoItems"></div>
+        </div>
+        <div class="messages" id="messages">
+          <div class="messages-inner" id="messagesInner">
+            <div class="welcome" id="welcome">
+              <img class="welcome-logo" src="/static/img/votex-logo.svg" alt="">
+              <h1>What are we <span>building</span> today?</h1>
+              <p>Ask anything, or switch to Code mode and watch your work render live beside the chat.</p>
+              <div class="suggestions">
+                <button class="suggestion" type="button" data-prompt="Explain how vector databases work in simple terms.">
+                  <strong>Explain a concept</strong>
+                  <span>Vector databases, simply explained</span>
+                </button>
+                <button class="suggestion" type="button" data-prompt="Write a Python script that renames files in a folder by date.">
+                  <strong>Ship a script</strong>
+                  <span>Python file renamer with argparse</span>
+                </button>
+                <button class="suggestion" type="button" data-prompt="Build a landing page for a futuristic AI startup called VorteX, dark theme with purple gradients.">
+                  <strong>Build a page</strong>
+                  <span>Dark AI landing page with a cyan HUD</span>
+                </button>
+                <button class="suggestion" type="button" data-prompt="Review this idea: a habit tracker that rewards you with credits and levels. What would you improve?">
+                  <strong>Pressure-test an idea</strong>
+                  <span>Get honest, structured feedback</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="composer-wrap">
+          <div class="mode-suggest hidden" id="modeSuggest" role="status">
+            <span class="ms-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>
+            </span>
+            <div class="ms-text">
+              <strong>This looks like a build task</strong>
+              <small>Code Mode splits the screen and previews what I build, live.</small>
+            </div>
+            <div class="ms-actions">
+              <button class="ms-btn primary" id="msSwitch" type="button">Switch to Code Mode</button>
+              <button class="ms-btn" id="msKeep" type="button">Send in Chat</button>
+            </div>
+          </div>
+
+          <form class="composer" id="composer">
+            <div class="model-popover" id="modelPopover" aria-hidden="true">
+              <div class="mp-models">
+                <div class="mp-label">Model</div>
+                <div class="mp-list" id="modelList"></div>
+              </div>
+              <div class="mp-effort">
+                <div class="mp-effort-head">
+                  <span>Reasoning effort</span>
+                  <span class="mp-effort-badge" id="effortBadge">MEDIUM</span>
+                </div>
+                <div class="mp-slider">
+                  <input type="range" id="effortSlider" min="0" max="3" step="1" value="1" aria-label="Reasoning effort">
+                  <div class="mp-ticks" id="effortTicks">
+                    <button type="button" data-effort="low">Low</button>
+                    <button type="button" data-effort="medium">Medium</button>
+                    <button type="button" data-effort="high">High</button>
+                    <button type="button" data-effort="max">Max</button>
+                  </div>
+                </div>
+                <p class="mp-desc" id="effortDesc">Balanced answers with the key details.</p>
+                <div class="mp-meta">
+                  <div class="mp-meta-row"><span>1 credit per token</span><span id="effortMaxOut">~2,048 max output</span></div>
+                  <div class="mp-meta-row"><span id="mpTokensLeft">You have 0 left</span><span id="mpPlanLimit">FREE USER · limit 0</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attach-strip hidden" id="attachStrip"></div>
+
+            <div class="composer-input-wrap">
+              <div class="composer-mirror hidden" id="composerMirror" aria-hidden="true"></div>
+              <textarea id="input" rows="1" placeholder="Ask anything — @ to mention a file" autocomplete="off" aria-autocomplete="list"></textarea>
+              <div class="mention-menu hidden" id="mentionMenu" role="listbox" aria-label="Mention attached file"></div>
+            </div>
+
+            <div class="composer-row">
+              <div class="composer-left">
+                <button type="button" class="plus-btn" id="attachBtn" title="Attach files or paste a screenshot" aria-label="Attach files">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.1 12.3 20a5.5 5.5 0 0 1-7.8-7.8l8.5-8.4a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>
+                </button>
+                <input type="file" id="imageInput" multiple hidden>
+
+                <button type="button" class="model-pill" id="modelPill" aria-haspopup="true" aria-expanded="false">
+                  <span class="m-logo" id="modelPillLogo">V</span>
+                  <span class="m-name" id="modelPillName">No model</span>
+                  <svg class="m-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+
+                <button type="button" class="think-pill" id="thinkPill" aria-pressed="false" title="Adds extra reasoning before the answer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 5.4a3 3 0 0 0-5.9-.7A2.8 2.8 0 0 0 4 7.6a3.1 3.1 0 0 0-.6 4.6A3.2 3.2 0 0 0 5 17.4a3 3 0 0 0 4.4 1.9A2.6 2.6 0 0 0 12 18.7V5.4Z"/>
+                    <path d="M12 5.4a3 3 0 0 1 5.9-.7A2.8 2.8 0 0 1 20 7.6a3.1 3.1 0 0 1 .6 4.6A3.2 3.2 0 0 1 19 17.4a3 3 0 0 1-4.4 1.9A2.6 2.6 0 0 1 12 18.7V5.4Z"/>
+                    <path d="M12 9.6h2.4M12 13.2H9.7"/>
+                  </svg>
+                  <span>Deep thinking</span>
+                  <span class="think-cost">+5</span>
+                </button>
+
+                <button type="button" class="think-pill" id="webPill" aria-pressed="false" title="Search Google, Wikipedia, GitHub and Hugging Face, and read pages">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.6"/>
+                    <path d="M3.4 12h17.2"/>
+                    <path d="M12 3.4c2.5 2.4 3.8 5.3 3.8 8.6s-1.3 6.2-3.8 8.6c-2.5-2.4-3.8-5.3-3.8-8.6s1.3-6.2 3.8-8.6Z"/>
+                  </svg>
+                  <span>Web</span>
+                </button>
+              </div>
+
+              <div class="composer-right">
+                <button type="button" class="sound-btn" id="soundBtn" title="Completion sound on" aria-pressed="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a9 9 0 0 1 0 12"/></svg>
+                </button>
+                <span class="token-count" id="tokenCounter">0 / 0 tokens</span>
+                <button class="send-btn" id="sendBtn" type="submit" title="Send" aria-label="Send message">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <p class="disclaimer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>
+            VorteX AI can make mistakes. Check important information.
+          </p>
+        </div>
+      </section>
+
+      <section class="preview-pane" id="previewPane">
+        <div class="preview-head">
+          <div class="preview-tabs">
+            <button type="button" data-tab="preview" class="active">Preview</button>
+            <button type="button" data-tab="code">Code</button>
+          </div>
+          <div class="preview-actions">
+            <button class="icon-btn" id="refreshPreview" title="Reload preview" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+            </button>
+            <button class="icon-btn" id="openPreview" title="Open in new tab" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="preview-body">
+          <iframe id="previewFrame" title="Live preview" sandbox="allow-scripts allow-forms allow-modals allow-popups allow-same-origin"></iframe>
+          <pre class="preview-code hidden" id="previewCode"><code></code></pre>
+          <div class="preview-empty" id="previewEmpty">
+            <div>
+              <strong>Nothing to preview yet</strong>
+              Ask for a page, component or snippet in Code mode and it renders here.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="app-modal" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="app-card settings-card">
+    <div class="settings-head">
+      <div>
+        <span class="settings-kicker">Workspace controls</span>
+        <h3 id="settingsTitle">Settings</h3>
+        <p class="modal-sub">Choose what VorteX shows and how it keeps you posted.</p>
+      </div>
+      <button class="icon-btn" id="settingsClose" type="button" title="Close settings" aria-label="Close settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="settings-group">
+      <label class="admin-toggle settings-toggle">
+        <input type="checkbox" id="settingNotify">
+        <span class="at-box"></span>
+        <span class="at-text">
+          <strong>Notification after a message</strong>
+          <small>A desktop notification when VorteX finishes a reply, even if the app is behind another window.</small>
+        </span>
+      </label>
+      <label class="admin-toggle settings-toggle">
+        <input type="checkbox" id="settingDiscord">
+        <span class="at-box"></span>
+        <span class="at-text">
+          <strong>Discord Rich Presence</strong>
+          <small>Shows “Working at Agents” and the active model in Discord. Application ID 1572007916725084190.</small>
+          <small class="settings-status" id="settingDiscordStatus" data-state="off">Checking Discord…</small>
+        </span>
+      </label>
+      <div class="settings-discord-test">
+        <button class="btn settings-test-btn" id="settingDiscordTest" type="button">Test Discord presence</button>
+        <span class="settings-test-result" id="settingDiscordTestResult" role="status" aria-live="polite"></span>
+      </div>
+      <label class="admin-toggle settings-toggle">
+        <input type="checkbox" id="settingModelUsage">
+        <span class="at-box"></span>
+        <span class="at-text">
+          <strong>Model usages</strong>
+          <small>Show the remaining tokens and credits for the selected model. Each model gets the full plan allowance again every 24 hours.</small>
+        </span>
+      </label>
+    </div>
+
+    <div class="settings-usage-head" id="settingsUsageHead">
+      <span>Model usages</span>
+      <small>Per-model allowances reset every 24 hours</small>
+    </div>
+    <div class="settings-usage-list" id="settingsUsageList"></div>
+
+    <div class="settings-vps" id="settingsVps">
+      <div class="settings-usage-head">
+        <span>VPS access</span>
+        <small>Let the AI build on your server</small>
+      </div>
+      <p class="settings-vps-note">Add SSH details so the AI can install software, write files and run services on a VPS when you ask. It never sees the saved password or key.</p>
+      <div class="vps-grid">
+        <label>Label<input class="modal-input" id="vpsName" placeholder="My server" maxlength="80" autocomplete="off"></label>
+        <label>Host / IP<input class="modal-input" id="vpsHost" placeholder="203.0.113.10" maxlength="255" autocomplete="off" spellcheck="false"></label>
+        <label>Port<input class="modal-input" id="vpsPort" type="number" min="1" max="65535" value="22"></label>
+        <label>Username<input class="modal-input" id="vpsUsername" placeholder="root" maxlength="80" autocomplete="off" spellcheck="false"></label>
+      </div>
+      <label class="modal-label" for="vpsAuth">Login method</label>
+      <select class="modal-input" id="vpsAuth">
+        <option value="password">Password</option>
+        <option value="key">Private key</option>
+      </select>
+      <div id="vpsPasswordWrap">
+        <label class="modal-label" for="vpsPassword">Password</label>
+        <input class="modal-input" id="vpsPassword" type="password" placeholder="Leave blank to keep the saved password" autocomplete="new-password">
+      </div>
+      <div id="vpsKeyWrap" class="hidden">
+        <label class="modal-label" for="vpsPrivateKey">Private key</label>
+        <textarea class="modal-input vps-key" id="vpsPrivateKey" rows="4" placeholder="-----BEGIN OPENSSH PRIVATE KEY-----" spellcheck="false"></textarea>
+        <label class="modal-label" for="vpsPassphrase">Key passphrase (optional)</label>
+        <input class="modal-input" id="vpsPassphrase" type="password" placeholder="Leave blank if the key has no passphrase" autocomplete="new-password">
+      </div>
+      <div class="settings-discord-test vps-actions">
+        <button class="btn settings-test-btn" id="vpsSave" type="button">Save VPS</button>
+        <button class="btn settings-test-btn" id="vpsTest" type="button">Test SSH</button>
+        <button class="btn settings-test-btn" id="vpsRemove" type="button">Remove</button>
+        <span class="settings-test-result" id="vpsResult" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <div class="settings-vps settings-updates" id="settingsUpdates">
+      <div class="settings-usage-head">
+        <span>App updates</span>
+        <small>Version {{ version }}</small>
+      </div>
+      <p class="settings-vps-note">VorteX checks for a newer build when it starts. When one is ready a popup offers the download — you always choose when to install.</p>
+      <div class="update-row">
+        <span class="update-chip" id="updateCurrentChip">v{{ version }}</span>
+        <span class="settings-test-result" id="updateStatus" role="status" aria-live="polite">Checking the update channel…</span>
+      </div>
+      <div class="settings-discord-test vps-actions">
+        <button class="btn settings-test-btn" id="updateCheck" type="button">Check for updates</button>
+        <button class="btn settings-test-btn" id="updateManualBtn" type="button">Download manually</button>
+      </div>
+    </div>
+
+    <div class="modal-actions settings-actions">
+      <span class="settings-hint" id="settingsHint">Changes save automatically.</span>
+      <button class="btn btn-primary" id="settingsDone" type="button">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+  <div class="app-card">
+    <h3 id="projectModalTitle">New project</h3>
+    <p class="modal-sub">Code Mode writes real files into the folder you choose on this PC.</p>
+    <label class="modal-label" for="projectName">Project name</label>
+    <input class="modal-input" id="projectName" placeholder="Coffee shop site" maxlength="80" autocomplete="off">
+    <label class="modal-label" for="projectFolder">Folder</label>
+    <div class="folder-row">
+      <input class="modal-input" id="projectFolder" placeholder="C:\Users\you\Projects\site" autocomplete="off">
+      <button class="btn" id="pickFolderBtn" type="button">Browse…</button>
+    </div>
+    <label class="modal-label" for="projectRepo">GitHub repository (optional, for Cursor models)</label>
+    <input class="modal-input" id="projectRepo" placeholder="https://github.com/you/repo" autocomplete="off">
+    <label class="admin-toggle">
+      <input type="checkbox" id="projectAdmin">
+      <span class="at-box"></span>
+      <span class="at-text">
+        <strong>Run as administrator</strong>
+        <small>Restarts VorteX AI with full PC access — Windows will ask. Each outside location still needs your Allow.</small>
+      </span>
+    </label>
+    <label class="admin-toggle">
+      <input type="checkbox" id="projectComputer">
+      <span class="at-box"></span>
+      <span class="at-text">
+        <strong>Let the AI test on this PC</strong>
+        <small>Mouse, keyboard, screenshots, file moves and launching the app or game. Every action is logged in the chat.</small>
+      </span>
+    </label>
+    <div class="modal-actions">
+      <button class="btn" id="cancelProject" type="button">Cancel</button>
+      <button class="btn btn-primary" id="createProjectBtn" type="button">Create project</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="permissionModal" role="dialog" aria-modal="true" aria-labelledby="permTitle">
+  <div class="app-card">
+    <h3 id="permTitle">Permission needed</h3>
+    <p class="modal-sub">VorteX wants to write outside the project folder:</p>
+    <div class="perm-paths" id="permissionPaths"></div>
+    <div class="modal-actions">
+      <button class="btn" id="denyWrite" type="button">Deny</button>
+      <button class="btn btn-primary" id="allowWrite" type="button">Allow</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+  <div class="app-card confirm-card">
+    <h3 id="confirmTitle">Delete project?</h3>
+    <p class="modal-sub" id="confirmText">Its chats move to "No project". The folder on disk is not touched.</p>
+    <div class="modal-actions">
+      <button class="btn" id="confirmCancel" type="button">Cancel</button>
+      <button class="btn btn-danger" id="confirmDelete" type="button">Delete project</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal" id="closeModal" role="alertdialog" aria-modal="true" aria-labelledby="closeTitle" aria-describedby="closeText closeNote">
+  <div class="app-card confirm-card close-card">
+    <span class="close-kicker">Model running</span>
+    <h3 id="closeTitle">Do you want to close VorteX?</h3>
+    <p class="modal-sub" id="closeText">This will end the progress of a project.</p>
+    <p class="close-note" id="closeNote">A model is currently running — think before closing.</p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="closeAnyway" type="button">CLOSE ANYWAY</button>
+      <button class="btn btn-primary" id="closeGoBack" type="button">GO BACK</button>
+    </div>
+  </div>
+</div>
+
+<div class="app-modal update-modal" id="updateModal" role="dialog" aria-modal="true" aria-labelledby="updateTitle">
+  <div class="app-card update-card" id="updateCard">
+    <div class="update-head">
+      <span class="update-orb" aria-hidden="true"><i></i></span>
+      <div class="update-head-text">
+        <span class="update-kicker">Update available</span>
+        <h3 id="updateTitle">A new VorteX AI build is ready</h3>
+        <p class="update-versions">
+          <span id="updateFrom">v{{ version }}</span>
+          <span class="update-arrow">→</span>
+          <strong id="updateTo">v{{ version }}</strong>
+        </p>
+      </div>
+      <button class="icon-btn" id="updateClose" type="button" title="Remind me later" aria-label="Remind me later" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <ul class="update-notes" id="updateNotes"></ul>
+    <div class="update-progress" id="updateProgress" hidden>
+      <div class="update-progress-head">
+        <span id="updatePhase">Preparing the download…</span>
+        <span class="update-percent" id="updatePercent">0%</span>
+      </div>
+      <div class="update-bar" id="updateBar"><i id="updateBarFill"></i><span class="update-sheen"></span></div>
+      <div class="update-meta">
+        <span id="updateSpeed">—</span>
+        <span id="updateSize">—</span>
+        <span id="updateEta">—</span>
+      </div>
+    </div>
+    <div class="modal-actions update-actions">
+      <button class="btn" id="updateLater" type="button">Later</button>
+      <button class="btn" id="updateManual" type="button">Download manually</button>
+      <button class="btn btn-primary" id="updateGet" type="button">Download update</button>
+    </div>
+    <p class="update-foot" id="updateFoot">The installer opens when the download finishes. Your chats and settings stay untouched.</p>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+  window.VORTEX_BOOT = {{ {"user": user, "plans": plans, "web_enabled": settings.get("web_enabled", "1") == "1", "version": version}|tojson }};
+</script>
+<script src="/static/js/hud.js?v={{ asset_v() }}"></script>
+<script src="/static/js/app.js?v={{ asset_v() }}"></script>
+</body>
+</html>

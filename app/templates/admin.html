@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03080d">
+  <title>VorteX AI — Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/votex-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v() }}">
+  <link rel="stylesheet" href="/static/css/hud.css?v={{ asset_v() }}">
+  <script>document.documentElement.classList.add("hud-ready");</script>
+</head>
+<body class="admin-body">
+<div class="aurora"></div>
+<div class="hud-overlay" aria-hidden="true">
+  <span class="hud-corner hud-corner-tl"></span>
+  <span class="hud-corner hud-corner-tr"></span>
+  <span class="hud-corner hud-corner-bl"></span>
+  <span class="hud-corner hud-corner-br"></span>
+  <span class="hud-side hud-side-left">VX-OS <b>04</b> // CONTROL</span>
+  <span class="hud-side hud-side-right">NEURAL CORE // ADMIN</span>
+</div>
+
+<div class="admin-shell">
+  <aside class="admin-nav">
+    <a class="brand" href="/">
+      <img class="brand-logo" src="/static/img/votex-logo.svg" alt="">
+      <div>
+        <span class="brand-name" style="font-size:15px">VorteX <em>AI</em></span>
+        <span class="brand-sub">Admin console</span>
+      </div>
+    </a>
+
+    <div class="nav-group">
+      <button class="nav-item active" data-panel="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Overview
+      </button>
+      <button class="nav-item" data-panel="models">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5 12 12l9-4.5L12 3Z"/><path d="M3 12l9 4.5 9-4.5M3 16.5 12 21l9-4.5"/></svg>
+        AI Models
+      </button>
+      <button class="nav-item" data-panel="web">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.5 4 5.6 4 9s-1.4 6.5-4 9c-2.6-2.5-4-5.6-4-9s1.4-6.5 4-9Z"/></svg>
+        Web access
+      </button>
+      <button class="nav-item" data-panel="payments">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg>
+        Payments
+      </button>
+      <button class="nav-item" data-panel="plans">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3z"/><path d="M3 11h18M8 3v4M16 3v4"/></svg>
+        Plans
+      </button>
+      <button class="nav-item" data-panel="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16.5 5.2a3.4 3.4 0 0 1 0 6.6M18 20a6.4 6.4 0 0 0-1.6-4.3"/></svg>
+        Users
+      </button>
+      <button class="nav-item" data-panel="orders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l2 4v14H4V7l2-4Z"/><path d="M4 7h16M9 11h6"/></svg>
+        Orders
+      </button>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="nav-group">
+      <a class="nav-item" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/></svg>
+        Back to workspace
+      </a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-head">
+      <div>
+        <h1 id="panelTitle">Overview</h1>
+        <p id="panelSub">How VorteX AI is performing right now.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <span class="pill pill-violet">ADMIN</span>
+        <span class="muted" style="font-size:12px">{{ user.email }}</span>
+      </div>
+    </div>
+
+    <!-- overview -->
+    <section class="panel" data-panel="overview">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="grid-2">
+        <div>
+          <div class="panel-head"><h3>Newest users</h3></div>
+          <table class="table"><thead><tr><th>User</th><th>Plan</th><th>Tokens left</th></tr></thead>
+            <tbody id="recentUsers"></tbody></table>
+        </div>
+        <div>
+          <div class="panel-head"><h3>Plan distribution</h3></div>
+          <table class="table"><thead><tr><th>Plan</th><th>Accounts</th></tr></thead>
+            <tbody id="planBreakdown"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- models -->
+    <section class="panel hidden" data-panel="models">
+      <div class="panel-head">
+        <div>
+          <h3>AI models &amp; API keys</h3>
+          <p>Add any OpenAI-compatible provider. Keys stay on the server and are never sent to browsers.</p>
+        </div>
+        <button class="btn btn-primary" id="addModelBtn">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Add model
+        </button>
+      </div>
+      <div class="model-grid" id="modelGrid"></div>
+    </section>
+
+    <!-- payments -->
+    <section class="panel hidden" data-panel="payments">
+      <div class="panel-head">
+        <div>
+          <h3>PayPal payment gateway</h3>
+          <p>Connect your PayPal REST app for desktop checkout. The website has its own checkout switch and shared plan editor in the website admin.</p>
+        </div>
+        <span class="pill" id="payStatus">Checking…</span>
+      </div>
+      <form id="payForm">
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="paypalMode">Mode</label>
+            <select class="select" id="paypalMode">
+              <option value="demo">Demo — activate plans without charging</option>
+              <option value="sandbox">Sandbox — PayPal test payments</option>
+              <option value="live">Live — real payments</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label" for="paypalCurrency">Currency</label>
+            <input class="input" id="paypalCurrency" maxlength="3" placeholder="USD">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="paypalClientId">PayPal client ID</label>
+          <input class="input" id="paypalClientId" placeholder="AeA1QIZ…" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="label" for="paypalSecret">PayPal client secret</label>
+          <input class="input" id="paypalSecret" type="password" placeholder="Leave blank to keep the current secret" autocomplete="new-password">
+          <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="secretState"></small>
+        </div>
+        <label class="switch" style="margin-bottom:16px">
+          <input type="checkbox" id="paypalEnabled">
+          <span class="track"></span>
+          <span class="t">Accept payments in the desktop app</span>
+        </label>
+        <button class="btn btn-primary" type="submit">Save payment settings</button>
+      </form>
+    </section>
+
+    <!-- web access -->
+    <section class="panel hidden" data-panel="web">
+      <div class="panel-head">
+        <div>
+          <h3>Web access</h3>
+          <p>Let the assistant search the live internet, read pages, and query Wikipedia, GitHub and Hugging Face.</p>
+        </div>
+        <span class="pill" id="webStatus">Checking…</span>
+      </div>
+      <form id="webForm">
+        <label class="switch" style="margin-bottom:16px">
+          <input type="checkbox" id="webEnabled">
+          <span class="track"></span>
+          <span class="t">Allow the assistant to read the internet</span>
+        </label>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="webProvider">Search engine</label>
+            <select class="select" id="webProvider">
+              <option value="auto">Automatic — first engine with a saved key</option>
+              <option value="google">Google Programmable Search</option>
+              <option value="serper">Serper (Google results)</option>
+              <option value="brave">Brave Search</option>
+              <option value="tavily">Tavily</option>
+              <option value="exa">Exa</option>
+              <option value="bing">Bing — no key needed</option>
+              <option value="duckduckgo">DuckDuckGo — no key needed</option>
+            </select>
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px">Without any key, Bing is used automatically and Wikipedia, GitHub and Hugging Face always work.</small>
+          </div>
+          <div class="field">
+            <label class="label" for="webPages">Pages read per question</label>
+            <select class="select" id="webPages">
+              <option value="0">Snippets only</option>
+              <option value="1">1 page</option>
+              <option value="2">2 pages</option>
+              <option value="3">3 pages</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="webGoogleKey">Google API key</label>
+            <input class="input" id="webGoogleKey" type="password" placeholder="Leave blank to keep the saved key" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webGoogleKeyState"></small>
+          </div>
+          <div class="field">
+            <label class="label" for="webGoogleCx">Google search engine ID (cx)</label>
+            <input class="input" id="webGoogleCx" placeholder="a1b2c3d4e5f6g7h8i" autocomplete="off">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="webBraveKey">Brave Search API key</label>
+            <input class="input" id="webBraveKey" type="password" placeholder="Leave blank to keep the saved key" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webBraveKeyState"></small>
+          </div>
+          <div class="field">
+            <label class="label" for="webSerperKey">Serper API key</label>
+            <input class="input" id="webSerperKey" type="password" placeholder="Leave blank to keep the saved key" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webSerperKeyState"></small>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="webTavilyKey">Tavily API key</label>
+            <input class="input" id="webTavilyKey" type="password" placeholder="Leave blank to keep the saved key" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webTavilyKeyState"></small>
+          </div>
+          <div class="field">
+            <label class="label" for="webExaKey">Exa API key</label>
+            <input class="input" id="webExaKey" type="password" placeholder="Leave blank to keep the saved key" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webExaKeyState"></small>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="webGithubToken">GitHub token (optional)</label>
+            <input class="input" id="webGithubToken" type="password" placeholder="Raises the GitHub search limit" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webGithubTokenState"></small>
+          </div>
+          <div class="field">
+            <label class="label" for="webHfToken">Hugging Face token (optional)</label>
+            <input class="input" id="webHfToken" type="password" placeholder="For gated models and higher limits" autocomplete="new-password">
+            <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="webHfTokenState"></small>
+          </div>
+        </div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-primary" type="submit">Save web access</button>
+          <button class="btn" type="button" id="webTestBtn">Test search</button>
+          <span class="muted" id="webTestOut" style="font-size:12px"></span>
+        </div>
+      </form>
+    </section>
+
+    <!-- plans -->
+    <section class="panel hidden" data-panel="plans">
+      <div class="panel-head">
+        <div>
+          <h3>Plans</h3>
+          <p>Prices, token and credit allowances shared with the website pricing page.</p>
+        </div>
+      </div>
+      <div class="grid-3" id="planGrid"></div>
+    </section>
+
+    <!-- users -->
+    <section class="panel hidden" data-panel="users">
+      <div class="panel-head"><div><h3>Users</h3><p>Everyone with a VorteX AI account.</p></div></div>
+      <table class="table">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Plan</th><th>Tokens left</th><th>Credits left</th></tr></thead>
+        <tbody id="userRows"></tbody>
+      </table>
+    </section>
+
+    <!-- orders -->
+    <section class="panel hidden" data-panel="orders">
+      <div class="panel-head"><div><h3>Orders</h3><p>Plan purchases and demo activations.</p></div></div>
+      <table class="table">
+        <thead><tr><th>Email</th><th>Plan</th><th>Amount</th><th>Provider</th><th>Status</th><th>When</th></tr></thead>
+        <tbody id="orderRows"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<!-- model modal -->
+<div class="modal-backdrop" id="modelModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modelModalTitle">Add AI model</h3>
+      <button class="icon-btn" type="button" id="closeModelModal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="modelForm">
+      <input type="hidden" id="modelIdInput">
+      <div class="modal-body">
+        <div class="field">
+          <label class="label">Model logo</label>
+          <label class="logo-drop" for="logoInput">
+            <span class="preview" id="logoPreview">+</span>
+            <span>
+              <strong style="font-size:12.5px;display:block">Upload a logo</strong>
+              <small>PNG, JPG, WEBP or SVG · up to 2 MB</small>
+            </span>
+          </label>
+          <input type="file" id="logoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif" class="hidden">
+        </div>
+
+        <div class="field">
+          <label class="label" for="modelProvider">Provider API</label>
+          <select class="select" id="modelProvider">
+            <option value="openai">OpenAI-compatible</option>
+            <option value="gemini">Google Gemini</option>
+            <option value="anthropic">Anthropic Claude</option>
+            <option value="cursor">Cursor Cloud Agent</option>
+          </select>
+          <div class="preset-row" id="providerPresets">
+            <button class="preset" type="button" data-preset="openai">ChatGPT</button>
+            <button class="preset" type="button" data-preset="gemini">Gemini</button>
+            <button class="preset" type="button" data-preset="anthropic">Claude</button>
+            <button class="preset" type="button" data-preset="deepseek">DeepSeek</button>
+            <button class="preset" type="button" data-preset="groq">Groq</button>
+            <button class="preset" type="button" data-preset="xai">Grok</button>
+            <button class="preset" type="button" data-preset="mistral">Mistral</button>
+            <button class="preset" type="button" data-preset="openrouter">OpenRouter</button>
+            <button class="preset" type="button" data-preset="cursor">Cursor</button>
+          </div>
+          <small class="preset-hint" id="providerHint">Paste an OpenAI API key — base URL and model ID can be edited freely.</small>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="modelNameInput">Display name</label>
+            <input class="input" id="modelNameInput" placeholder="GPT-6.1 Sol" required>
+          </div>
+          <div class="field">
+            <label class="label" for="modelIdValue">Model ID</label>
+            <input class="input" id="modelIdValue" placeholder="gpt-6.1-sol" required list="modelIdOptions">
+            <datalist id="modelIdOptions"></datalist>
+            <button class="btn btn-sm" type="button" id="loadModelsBtn" style="margin-top:7px;width:100%">Load from API key</button>
+            <small class="preset-hint" id="modelIdHint">Type the exact ID, or load the list of models your key can use.</small>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label" for="modelBase">API base URL</label>
+          <input class="input" id="modelBase" placeholder="https://api.openai.com/v1" value="https://api.openai.com/v1">
+          <small class="preset-hint">Leave empty to use the provider default.</small>
+        </div>
+        <div class="field">
+          <label class="label" for="modelKey">API key</label>
+          <input class="input" id="modelKey" type="password" placeholder="sk-…" autocomplete="off">
+          <small class="muted" style="font-size:11px;display:block;margin-top:6px" id="modelKeyHint">Stored server-side only.</small>
+        </div>
+        <div class="field">
+          <label class="label" for="modelDesc">Description</label>
+          <input class="input" id="modelDesc" placeholder="Fast, general-purpose model">
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="modelEnabled" checked>
+          <span class="track"></span>
+          <span class="t">Available to users</span>
+        </label>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" type="button" id="cancelModelBtn">Cancel</button>
+        <button class="btn btn-primary" type="submit" id="saveModelBtn">Save model</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script src="/static/js/hud.js?v={{ asset_v() }}"></script>
+<script src="/static/js/admin.js?v={{ asset_v() }}"></script>
+</body>
+</html>

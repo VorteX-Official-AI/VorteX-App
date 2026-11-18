@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03080d">
+  <title>VorteX AI — Plans</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/votex-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/app.css?v={{ asset_v() }}">
+  <link rel="stylesheet" href="/static/css/hud.css?v={{ asset_v() }}">
+  <script>document.documentElement.classList.add("hud-ready");</script>
+</head>
+<body class="pricing-body">
+<div class="aurora"></div>
+<div class="grid-lines"></div>
+<div class="hud-overlay" aria-hidden="true">
+  <span class="hud-corner hud-corner-tl"></span>
+  <span class="hud-corner hud-corner-tr"></span>
+  <span class="hud-corner hud-corner-bl"></span>
+  <span class="hud-corner hud-corner-br"></span>
+  <span class="hud-side hud-side-left">VX-OS <b>04</b> // PLANS</span>
+  <span class="hud-side hud-side-right">NEURAL CORE // POWER</span>
+</div>
+<div class="hud-telemetry" aria-hidden="true">
+  <span class="hud-tel-label"><i></i> ARC REACTOR</span>
+  <span class="hud-tel-clock" data-hud-clock>--:--:--</span>
+  <span class="hud-tel-page" data-hud-page>VX-OS // ONLINE</span>
+</div>
+
+<div class="page-wrap">
+  <nav class="page-nav">
+    <a class="brand" href="/">
+      <img class="brand-logo" src="/static/img/votex-logo.svg" alt="VorteX AI">
+      <div>
+        <span class="brand-name">VorteX <em>AI</em></span>
+        <span class="brand-sub">AI workspace</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      {% if user %}
+      <span class="pill pill-violet">{{ user.plan|upper }} plan</span>
+      <a class="btn btn-sm" href="/">Open workspace</a>
+      {% else %}
+      <a class="btn btn-sm" href="/login">Sign in</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <header class="pricing-head">
+    <h1>Pick your <span>power level</span></h1>
+    <p>Every plan is billed monthly and unlocks the full workspace. Each enabled model gets the same full token and credit allowance, and every model's allowance resets every 24 hours.</p>
+  </header>
+
+  <div class="plans-grid">
+    {% for plan in plans %}
+    <article class="plan-card {% if plan.badge %}featured{% endif %}">
+      {% if plan.badge %}<span class="plan-badge">{{ plan.badge }}</span>{% endif %}
+      <div class="plan-name">{{ plan.name }}</div>
+      <div class="plan-price">
+        <span class="amount">${{ "%.2f"|format(plan.price_cents / 100) }}</span>
+        <span class="per">/ month</span>
+      </div>
+      <p class="plan-tagline">{{ plan.tagline or "" }}</p>
+      <div class="plan-stats">
+        <div class="plan-stat">
+          <strong>{{ "{:,}".format(plan.tokens) }}</strong>
+          <span>tokens / model</span>
+        </div>
+        <div class="plan-stat">
+          <strong>{{ "{:,}".format(plan.credits) }}</strong>
+          <span>credits / model</span>
+        </div>
+      </div>
+      <ul class="plan-features">
+        {% for feature in plan.features %}
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          {{ feature }}
+        </li>
+        {% endfor %}
+      </ul>
+      <button class="btn {% if plan.badge %}btn-primary{% endif %} plan-cta" type="button"
+              data-plan="{{ plan.slug }}" data-price="{{ plan.price_cents }}">
+        {% if user and user.plan == plan.slug %}Current plan{% else %}Get {{ plan.name }}{% endif %}
+      </button>
+      {% if user and user.plan == plan.slug %}<div class="plan-current">Active on your account</div>{% endif %}
+    </article>
+    {% endfor %}
+  </div>
+
+  <p class="pricing-note">Monthly plan · per-model allowance · resets every 24 hours</p>
+  <p class="pricing-note" id="payNote">Secure checkout. Your tokens and credits are applied instantly after payment.</p>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script>
+  window.VORTEX_PRICING = {{ {"user": user}|tojson }};
+</script>
+<script src="/static/js/hud.js?v={{ asset_v() }}"></script>
+<script src="/static/js/pricing.js?v={{ asset_v() }}"></script>
+</body>
+</html>
