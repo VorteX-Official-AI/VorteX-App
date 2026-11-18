@@ -1,0 +1,26 @@
+# Runtime data and local state
+data/
+static/uploads/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Build output and generated installers
+build/
+dist/
+installers/
+tools/
+*.spec.bak
+
+# Generated installer artwork (created by installer/make_assets.py)
+installer/assets/
+
+# Secrets and OS noise
+.env
+.DS_Store
+Thumbs.db
